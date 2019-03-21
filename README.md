@@ -245,6 +245,95 @@ sudo systemctl restart sshd
 When everything has been set up we'll also configure the firewall to allow incoming
 requests on port 2200.
 
+## Create grader user
+
+```bash
+sudo adduser grader
+```
+
+Give `sudo` privileges:
+
+```bash
+usermod -aG sudo grader
+```
+
+### Create grader user - setup keypair
+
+Create keypair on server and client.
+
+On client:
+
+```bash
+ssh-keygen
+```
+
+Specify directory: `/Users/richard/.ssh/<filename>`
+
+Add key to SSH authentication agent for implementing single sign-on with SSH:
+
+```bash
+ssh-add .ssh/<filename>
+```
+
+On host (your Ubuntu instance):
+
+While logged in as your normal user, switch to the grader us:
+
+```bash
+su - grader
+```
+
+Create an `.ssh` directory and add an `authorized_keys` file to it:
+
+```bash
+mkdir .ssh
+vim .ssh/authorized_keys
+```
+
+paste the content of your <filename>.pub created earlier during your SSH keygen
+into the authorized_keys file on your host.
+
+Set privileges:
+
+```bash
+chmod 700 ~/.ssh
+chmod 644 ~/.ssh/authorized_keys
+```
+
+Now you should be able to login on the grader using:
+
+```bash
+ssh grader@<public_ip> -p 2200 -i ~/.ssh/<filename>
+```
+
+on your client.
+
+## Disable password logins
+
+Edit `/etc/ssh/sshd_config`:
+
+```bash
+/PasswordAuthentication
+```
+
+_Note: forward-slash in vim to search for line with PasswordAuthentication in it._
+
+Append the line with `no`:
+
+```bash
+- PasswordAuthentication
++ PasswordAuthentication no
+```
+
+Restart `service ssh`:
+
+```bash
+sudo service ssh restart
+```
+
+
+
+
 ## Firewall
 
 Configure the firewall as:
