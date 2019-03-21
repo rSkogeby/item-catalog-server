@@ -57,11 +57,8 @@ Install nginx:
 sudo apt-get update & sudo apt-get install nginx
 ```
 
-Set firewall access for out- and ingoing on port 80/tcp:
+Firewall configs are set up later, see section Firewall.
 
-```bash
-sudo ufw allow 'Nginx HTTP'
-```
 
 ### Install additional requisites from Ubuntu repository
 
@@ -170,6 +167,12 @@ Create a soft link to that file in the `sites-enabled` directory:
 sudo ln -s /etc/nginx/sites-available/item-catalog /etc/nginx/sites-enabled
 ```
 
+Delete the default instance nginx puts in `sites-enabled`
+
+```bash
+sudo rm /etc/nginx/sites-enabled/default
+```
+
 Restart nginx:
 
 ```bash
@@ -177,6 +180,9 @@ sudo systemctl restart nginx
 ```
 
 _Note: anytime you'd like to implement a change to your sites-available config you will need to restart nginx._
+
+
+### Errorshooting and trouble finding
 
 At this stage you should be able to access Item Catalog on your <public_ip>.
 If you are not able to do so, you might need to make appropriate configurations
@@ -205,12 +211,58 @@ sudo journalctl -u myproject
 ```
 
 
+## Add a non-standard SSH port
+
+We'll be changing the SSH port to 2200.
+
+In the Lightsail management console, open a port in the firewall configuration:
+
+```bash
+Application = Custom
+Protocol = TCP
+Port = 2200
+```
+
+In your Ubuntu instance edit the port in `sshd_config` in `/etc/ssh/` directory to 2200:
+
+```bash
+sudo vim /etc/ssh/sshd_config
+```
+
+and do the following change:
+
+```bash
+- # Port 22
++ Port 2200
+```
+
+`:wq` to write and quit, and proceed to restart sshd:
+
+```bash
+sudo systemctl restart sshd
+```
+
+When everything has been set up we'll also configure the firewall to allow incoming
+requests on port 2200.
+
 ## Firewall
+
+Configure the firewall as:
+
+
+```bash
 sudo ufw status
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
-sudo ufw allow ssh
 sudo ufw allow 2200/tcp
 sudo ufw allow www
 sudo ufw enable
 sudo ufw status
+```
+
+Allow incoming requests on port 2200 for SSH access.
+Set firewall access for out- and ingoing on port 80/tcp:
+
+```bash
+sudo ufw allow 'Nginx HTTP'
+```
