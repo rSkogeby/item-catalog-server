@@ -331,8 +331,15 @@ Restart `service ssh`:
 sudo service ssh restart
 ```
 
+## Configure timezone
 
+Configure timezone to UTC.
 
+```bash
+sudo dpkg-reconfigure tzdata
+```
+
+Select option 'None of the above' > UTC.
 
 ## Firewall
 
