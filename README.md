@@ -17,10 +17,9 @@ http://pintfindr.com
 
 ## Software
 
-- Ubuntu LTS 18
+- Ubuntu LTS 18.04
 - nginx
-- uwsgi
-- [Item Catalog](https://github.com/rSkogeby/item-catalog)
+- [Item Catalog](https://github.com/rSkogeby/item-catalog) (and all its requirements)
 - python3-venv
 - python3-pip
 - python3-dev
@@ -32,7 +31,7 @@ http://pintfindr.com
 
 ## Software installs
 
-This guide assumes you start with a fresh Ubuntu LTS 18 install created with
+This guide assumes you start with a fresh Ubuntu LTS 18.04 install created with
 Amazon Lightsail, and assumes you follow it through in a linear fashion.
 It is almost entirely based on [Kathlin Juell's](https://www.digitalocean.com/community/users/katjuell) and [Justin Ellingwood's](https://www.digitalocean.com/community/users/jellingwood) article on
 DigitalOcean: [How To Serve Flask Applications with uWSGI and Nginx on Ubuntu 18.04](https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04).
@@ -207,7 +206,7 @@ sudo journalctl -u nginx
 
 Check your Flask app's uWSGI logs.
 ```bash
-sudo journalctl -u myproject
+sudo journalctl -u item-catalog
 ```
 
 
@@ -331,6 +330,21 @@ Restart `service ssh`:
 sudo service ssh restart
 ```
 
+## Disallow root login
+
+Edit `sshd_config`:
+
+```bash
+sudo vim /etc/ssh/sshd_config
+```
+
+Type `/` to search for `PermitRootLogin`, uncomment the line and append with `no`:
+
+```bash
+- #PermitRootLogin yes
++ PermitRootLogin no
+```
+
 ## Configure timezone
 
 Configure timezone to UTC.
@@ -362,3 +376,52 @@ Set firewall access for out- and ingoing on port 80/tcp:
 ```bash
 sudo ufw allow 'Nginx HTTP'
 ```
+
+## Setting up PostgreSQL
+
+```bash
+sudo apt-get install postgresql
+```
+
+Start PostgreSQL on startup:
+
+```bash
+sudo update-rc.d postgresql enable
+```
+
+Start PostgreSQL:
+
+```bash
+sudo service postgresql start
+```
+
+With the user and database setup, switch user to continue the setup:
+
+```bash
+sudo su - postgres
+```
+
+Start a postgres interactive query session to make sure things are working:
+
+```bash
+psql
+```
+
+To exit the query session type `\q`, and to get back to your other user `exit`.
+
+In your main user create an a database:
+
+```bash
+sudo -u postgres createdb item_catalog_db
+```
+
+
+
+
+# List of help
+
+- []()
+- []()
+- []()
+- [Setup for PostgreSQL](https://www.godaddy.com/garage/how-to-install-postgresql-on-ubuntu-14-04/)
+- [Timezone config](https://help.ubuntu.com/community/UbuntuTime)
