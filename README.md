@@ -95,11 +95,11 @@ Clone repository:
 git clone https://github.com/rSkogeby/item-catalog.git
 ```
 
-Checkout the `prod` branch:
+Checkout the `prod_sqlite` branch:
 
 ```bash
 cd item-catalog
-git checkout prod
+git checkout prod_sqlite
 ```
 
 Install requirements
