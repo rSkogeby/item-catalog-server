@@ -377,10 +377,7 @@ Set firewall access for out- and ingoing on port 80/tcp:
 sudo ufw allow 'Nginx HTTP'
 ```
 
-# List of help
+# Credit
 
-- []()
-- []()
-- []()
-- [Setup for PostgreSQL](https://www.godaddy.com/garage/how-to-install-postgresql-on-ubuntu-14-04/)
+- [How To Serve Flask Applications with uWSGI and Nginx on Ubuntu 18.04](https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04).
 - [Timezone config](https://help.ubuntu.com/community/UbuntuTime)
