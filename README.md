@@ -377,47 +377,6 @@ Set firewall access for out- and ingoing on port 80/tcp:
 sudo ufw allow 'Nginx HTTP'
 ```
 
-## Setting up PostgreSQL
-
-```bash
-sudo apt-get install postgresql
-```
-
-Start PostgreSQL on startup:
-
-```bash
-sudo update-rc.d postgresql enable
-```
-
-Start PostgreSQL:
-
-```bash
-sudo service postgresql start
-```
-
-With the user and database setup, switch user to continue the setup:
-
-```bash
-sudo su - postgres
-```
-
-Start a postgres interactive query session to make sure things are working:
-
-```bash
-psql
-```
-
-To exit the query session type `\q`, and to get back to your other user `exit`.
-
-In your main user create an a database:
-
-```bash
-sudo -u postgres createdb item_catalog_db
-```
-
-
-
-
 # List of help
 
 - []()
